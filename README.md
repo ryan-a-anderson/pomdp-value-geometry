@@ -139,7 +139,7 @@ Memoryless stochastic policies are parametrized by softmax over observation-cond
 ```bibtex
 @article{anderson2026value,
   title={The Value Function Semi-Algebraic Set in POMDPs},
-  authors={Anderson, Ryan A.}, {Montúfar, Guido},
+  author={Anderson, Ryan A. and Montúfar, Guido},
   year={2026}
 }
 ```
