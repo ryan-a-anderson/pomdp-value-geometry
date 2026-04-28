@@ -45,25 +45,27 @@ The MATLAB outputs are checked in alongside the scripts:
 ├── README.md
 ├── LICENSE
 ├── requirements.txt
-├── pomdp_linear_nonlinear_inequalities.py   # Figs 2, 3
-├── initial_distribution_analysis.py          # Fig 4
-├── initial_distribution_analysis_multi.py    # Fig 4 variants across configurations
-├── pomdp_optim_dynamics.py                   # Supporting: optimization dynamics + POMDPAnalyzer
-├── pomdp_optim_dynamics_very_noisy.py        # Supporting: very noisy three-region case
-├── pomdp_structural_ablations.py             # Exploratory structural comparisons
-├── local_optima_experiments.py               # Python reference port of Experiments A/B
-├── test_local_optima.py                      # Gradient correctness tests
+├── src/                                       # Python source
+│   ├── pomdp_optim_dynamics.py                #   POMDPAnalyzer (shared core)
+│   ├── pomdp_optim_dynamics_very_noisy.py     #   very noisy three-region case
+│   ├── pomdp_linear_nonlinear_inequalities.py #   → Figs 2, 3
+│   ├── initial_distribution_analysis.py       #   → Fig 4
+│   ├── initial_distribution_analysis_multi.py #   Fig 4 variants
+│   ├── pomdp_structural_ablations.py          #   exploratory structural comparisons
+│   └── local_optima_experiments.py            #   Python reference port of Exps A/B
+├── tests/
+│   └── test_local_optima.py                   # Gradient correctness tests
 ├── matlab/
-│   ├── pomdp_localopt/                       # Canonical Experiments A & B (MATLAB)
+│   ├── pomdp_localopt/                        # Canonical Experiments A & B
 │   │   ├── run_pomdp_localopt_experiment.m
 │   │   ├── export_summary_table_markdown.m
 │   │   ├── summary_table.md
 │   │   └── README.txt
-│   └── pomdp_memory_enhancement/             # Canonical Experiment C (MATLAB)
+│   └── pomdp_memory_enhancement/              # Canonical Experiment C
 │       ├── run_pomdp_memory_enhancement_experiment.m
 │       ├── summary_table.md
 │       └── README.txt
-└── figures/                                   # Generated output figures
+└── figures/                                    # Generated output figures
 ```
 
 ## Installation
@@ -86,12 +88,20 @@ The MATLAB scripts use only base MATLAB (no toolboxes required beyond the Statis
 
 ### Figures (Python)
 
+Run from the repo root:
+
 ```bash
 # Figs 2 and 3 (linear and semi-algebraic boundaries)
-python pomdp_linear_nonlinear_inequalities.py
+python src/pomdp_linear_nonlinear_inequalities.py
 
 # Fig 4 (initial state distribution dependence)
-python initial_distribution_analysis.py
+python src/initial_distribution_analysis.py
+```
+
+### Tests
+
+```bash
+python tests/test_local_optima.py
 ```
 
 ### Experiments A & B — Local optima (MATLAB)
