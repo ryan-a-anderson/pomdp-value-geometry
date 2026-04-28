@@ -101,7 +101,7 @@ All experiments sample random POMDP instances from (S, A, O) configurations on t
 ```bibtex
 @article{anderson2026value,
   title={The Value Function Semi-Algebraic Set in POMDPs},
-  authors={Anderson, Ryan A.}, {Montúfar, Guido,
+  authors={Anderson, Ryan A.}, {Montúfar, Guido},
   year={2026}
 }
 ```
