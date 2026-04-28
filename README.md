@@ -1,9 +1,9 @@
-# Value Function Geometry for Memoryless POMDPs
+# The Value Function Semi-Algebraic Set in POMDPs
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 
-Code for the paper **"Value Function Geometry for Partially Observable Markov Decision Processes"** (Anderson, 2026).
+Code for the paper **"The Value Function Semi-Algebraic Set in POMDPs"** (Anderson & Montúfar, 2026).
 
 ## Overview
 
@@ -100,8 +100,8 @@ All experiments sample random POMDP instances from (S, A, O) configurations on t
 
 ```bibtex
 @article{anderson2026value,
-  title={Value Function Geometry for Partially Observable Markov Decision Processes},
-  author={Anderson, Ryan},
+  title={The Value Function Semi-Algebraic Set in POMDPs},
+  authors={Anderson, Ryan A.}, {Montúfar, Guido,
   year={2026}
 }
 ```
