@@ -30,7 +30,9 @@ pip install -r requirements.txt
 | `pomdp_linear_nonlinear_inequalities.py` | Figures 1 & 2 (Appendix B.1) | Piecewise-linear boundary samples (blue) and semi-algebraic boundary curves (red/green dashed) for a (S=2, A=2, O=3) instance |
 | `initial_distribution_analysis.py` | Figure 3 (Appendix B.1) | Optimal policy regions as the initial state distribution ρ varies |
 | `initial_distribution_analysis_multi.py` | Figure 3 variants | Same analysis across multiple POMDP configurations |
-| `pomdp_structural_ablations.py` | Tables 1–3 (Appendix B.2, Experiments A/B/C) | Policy-gradient spread, local optima count, and finite-memory comparisons across an (S, A, O) grid |
+| `local_optima_experiments.py` | Table 1 (Appendix B.2, Experiment A) | Large-scale policy-gradient spread experiment across the (S, A, O) grid with random POMDP instances; self-contained implementation |
+| `test_local_optima.py` | — | Gradient correctness tests (finite-difference check) for `local_optima_experiments.py` |
+| `pomdp_structural_ablations.py` | Appendix B.2, Experiments B/C | Local optima count and finite-memory comparisons across structural configurations |
 | `pomdp_optim_dynamics.py` | Supporting | Multi-start optimization trajectories and feasible value region visualization |
 | `pomdp_optim_dynamics_very_noisy.py` | Supporting | Same for the "very noisy" three-region configuration |
 
@@ -42,6 +44,8 @@ pip install -r requirements.txt
 ├── LICENSE
 ├── requirements.txt
 ├── pomdp_linear_nonlinear_inequalities.py
+├── local_optima_experiments.py
+├── test_local_optima.py
 ├── pomdp_structural_ablations.py
 ├── pomdp_optim_dynamics.py
 ├── pomdp_optim_dynamics_very_noisy.py
@@ -62,7 +66,12 @@ python pomdp_linear_nonlinear_inequalities.py
 python initial_distribution_analysis.py
 ```
 
-**Tables 1–3** (Experiments A, B, C):
+**Table 1** (Experiment A — policy-gradient spread across (S, A, O) grid):
+```bash
+python local_optima_experiments.py
+```
+
+**Tables 2–3** (Experiments B/C — local optima count, finite memory):
 ```bash
 python pomdp_structural_ablations.py
 ```
