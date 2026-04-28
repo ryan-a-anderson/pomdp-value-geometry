@@ -172,6 +172,88 @@ class POMDPAnalyzer:
         plt.tight_layout()
         plt.show()
 
+    def plot_linear_only(self, num_y_dirs=12, grid_res=300, save_path=None):
+        """
+        Plots the true feasible region (from q-test) with linear inequality support hyperplanes.
+        Shows the linear inequalities as tangent lines to the exact feasible region.
+        """
+        print(f"Generating feasible region and {num_y_dirs} linear inequality directions...")
+
+        # 1. Estimate Bounds via random sampling
+        p_samples = np.random.rand(1000, self.n_obs)
+        vals = np.array([self.solve_v(p) for p in p_samples])
+        v0, v1 = vals[:, 0], vals[:, 1]
+
+        pad = 0.8 * (v0.max() - v0.min())
+        x_min, x_max = v0.min() - pad, v0.max() + pad
+        y_min, y_max = v1.min() - pad, v1.max() + pad
+
+        X = np.linspace(x_min, x_max, grid_res)
+        Y = np.linspace(y_min, y_max, grid_res)
+        XX, YY = np.meshgrid(X, Y)
+
+        # Flatten grid for vectorized checks
+        X_flat = np.vstack([XX.ravel(), YY.ravel()])
+        if self.n_states > 2:
+            X_flat = np.vstack([X_flat, np.zeros((self.n_states - 2, X_flat.shape[1]))])
+
+        # --- COMPUTE EXACT FEASIBLE REGION (via q-test) ---
+        print("Computing exact feasible region via q-test...")
+        FEAS = np.zeros_like(XX, dtype=float)
+
+        for i in range(grid_res):
+            for j in range(grid_res):
+                x_vec = X_flat[:, i*grid_res + j]
+                q = self._get_q_of_x(x_vec)
+                if q is not None:
+                    FEAS[i,j] = 1.0 if np.all(np.abs(q) <= 1 + 1e-10) else 0.0
+
+        # --- LINEAR INEQUALITIES (Support Function Test) ---
+        # Generate y directions (unit circle)
+        thetas = np.linspace(0, 2*np.pi, num_y_dirs, endpoint=False)
+        Y_dirs = np.vstack([np.cos(thetas), np.sin(thetas)])
+        if self.n_states > 2:
+             Y_dirs = np.vstack([Y_dirs, np.zeros((self.n_states - 2, num_y_dirs))])
+
+        # Precompute terms for vectorized inequality check
+        Ac_X_bc = self.Ac @ X_flat - self.bc[:, None]
+        Uk_X_bk = [(self.A_ks[k] @ X_flat - self.b_ks[k][:, None]) for k in range(self.n_obs)]
+
+        plt.figure(figsize=(10, 8))
+
+        # Plot each Y direction inequality boundary (matching original style)
+        for d in range(num_y_dirs):
+            y = Y_dirs[:, d]
+            lhs = y @ Ac_X_bc
+            rhs = np.zeros_like(lhs)
+            for k in range(self.n_obs):
+                term = y @ Uk_X_bk[k]
+                rhs += self.pD[k] * np.abs(term)
+
+            margin = rhs - lhs
+            Margin_Grid = margin.reshape(grid_res, grid_res)
+
+            # Plot the boundary (Margin = 0) - matching original blue color and style
+            plt.contour(XX, YY, Margin_Grid, levels=[0], colors='cornflowerblue',
+                       linewidths=1, alpha=0.6)
+
+        # Shade TRUE feasible region (from exact q-test, not from linear inequalities)
+        plt.contourf(XX, YY, FEAS, levels=[-0.1, 0.5, 1.1], alpha=0.18)
+
+        # Formatting (matching original)
+        plt.plot([], [], color='cornflowerblue', linewidth=1, label='Linear Inequalities')
+        plt.xlabel("v(s=0)")
+        plt.ylabel("v(s=1)")
+        plt.legend(loc='lower right')
+        plt.grid(True, alpha=0.2)
+        plt.tight_layout()
+
+        if save_path:
+            plt.savefig(save_path, dpi=150, bbox_inches='tight')
+            print(f"Saved to {save_path}")
+        else:
+            plt.show()
+
 # --- Run ---
 if __name__ == "__main__":
     # Standard Example
@@ -181,10 +263,13 @@ if __name__ == "__main__":
     P1 = P0 + PDelta
     P = np.array([P0, P1])
     R = np.array([[1.0, 0.0], [0.0, 1.0]])
-    #Beta = np.array([[0.80, 0.20], [0.30, 0.70]])
-    Beta = np.eye(2)
+    Beta = np.array([[0.80, 0.10, 0.10], [0.30, 0.65, 0.05]])
+    #Beta = np.eye(2)
 
     pomdp = POMDPAnalyzer(P, R, Beta)
-    
+
     # Try a good number of directions to see the "cuts" clearly
-    pomdp.plot_with_inequalities(num_y_dirs=25)
+    # pomdp.plot_with_inequalities(num_y_dirs=25)
+
+    # Generate plot with only linear inequalities
+    pomdp.plot_linear_only(num_y_dirs=25)

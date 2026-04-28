@@ -40,7 +40,7 @@ if __name__ == "__main__":
         (0.5, 0.5),   # Region 1/2 boundary area
         (0.65, 0.35), # Region 2: Should converge to policy [0,1]
         (0.75, 0.25), # Region 2/3 boundary area
-        (0.85, 0.15), # Region 3: Should converge to policy [0,0]
+        (0.8, 0.2), # Region 3: Should converge to policy [0,0]
     ]
 
     print("1. Creating multi-start comparison across different initial distributions...")

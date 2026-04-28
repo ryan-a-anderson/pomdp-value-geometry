@@ -607,9 +607,9 @@ class POMDPAnalyzer:
         p_samples = np.random.rand(200, self.n_obs)
         vals = np.array([self.solve_v(p) for p in p_samples])
         v0, v1 = vals[:, 0], vals[:, 1]
-        pad = 0.8 * (v0.max() - v0.min())
-        x_min, x_max = v0.min() - pad, v0.max() + pad
-        y_min, y_max = v1.min() - pad, v1.max() + pad
+        pad = 0
+        x_min, x_max = 3, 8
+        y_min, y_max = 3, 8
 
         X = np.linspace(x_min, x_max, grid_res)
         Y = np.linspace(y_min, y_max, grid_res)
@@ -697,11 +697,10 @@ class POMDPAnalyzer:
             axes[idx].axis('off')
 
         # Add legend to first subplot
-        if n_rhos > 0:
-            axes[0].legend(loc='best', fontsize=9)
+        #if n_rhos > 0:
+        #    axes[0].legend(loc='best', fontsize=9)
 
-        plt.suptitle("Optimization Dynamics: How Initial Distribution Affects Convergence",
-                    fontsize=15, fontweight='bold', y=1.0)
+        #plt.suptitle("Optimization Dynamics: How Initial Distribution Affects Convergence",fontsize=15, fontweight='bold', y=1.0)
         plt.tight_layout()
 
         return fig
