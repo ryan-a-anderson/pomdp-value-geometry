@@ -13,28 +13,30 @@ The experiments illustrate two consequences of this geometric structure:
 1. The feasible value set has curved (nonlinear) boundary components, captured exactly by finitely many polynomial constraints.
 2. Partial observability induces genuinely non-convex optimization landscapes with multiple isolated local optima under policy gradient, unlike the fully observable case.
 
-## Installation
+## Components by paper section
 
-```bash
-git clone https://github.com/ryan-a-anderson/pomdp-value-geometry.git
-cd pomdp-value-geometry
-pip install -r requirements.txt
-```
+### Figures
 
-**Dependencies**: `numpy`, `matplotlib`, `scipy` (see `requirements.txt`).
+| Figure | Paper reference | Source |
+|--------|----------------|--------|
+| `fo_po_mdp_policy_region.png` (Fig. 1) | Section 2 | Schematic / hand-drawn — no script |
+| `linear_inequalities_2.png` (Fig. 2) | Theorem 3.1 illustration | `pomdp_linear_nonlinear_inequalities.py` |
+| `linear_nonlinear_ineqs.png` (Fig. 3) | Theorem 3.3 illustration | `pomdp_linear_nonlinear_inequalities.py` |
+| `pomdp_initial_state_ablation.png` (Fig. 4) | ρ-dependence visualization | `initial_distribution_analysis.py` (saves as `initial_distribution_analysis.png`) |
 
-## Scripts and Paper Correspondence
+### Experiments (Appendix B.2)
 
-| Script | Paper section | What it produces |
-|--------|--------------|-----------------|
-| `pomdp_linear_nonlinear_inequalities.py` | Figures 1 & 2 (Appendix B.1) | Piecewise-linear boundary samples (blue) and semi-algebraic boundary curves (red/green dashed) for a (S=2, A=2, O=3) instance |
-| `initial_distribution_analysis.py` | Figure 3 (Appendix B.1) | Optimal policy regions as the initial state distribution ρ varies |
-| `initial_distribution_analysis_multi.py` | Figure 3 variants | Same analysis across multiple POMDP configurations |
-| `local_optima_experiments.py` | Table 1 (Appendix B.2, Experiment A) | Large-scale policy-gradient spread experiment across the (S, A, O) grid with random POMDP instances; self-contained implementation |
-| `test_local_optima.py` | — | Gradient correctness tests (finite-difference check) for `local_optima_experiments.py` |
-| `pomdp_structural_ablations.py` | Appendix B.2, Experiments B/C | Local optima count and finite-memory comparisons across structural configurations |
-| `pomdp_optim_dynamics.py` | Supporting | Multi-start optimization trajectories and feasible value region visualization |
-| `pomdp_optim_dynamics_very_noisy.py` | Supporting | Same for the "very noisy" three-region configuration |
+The MATLAB scripts in `matlab/` are the canonical implementations that produced the tables in the paper. The Python `local_optima_experiments.py` is an independent reference port.
+
+| Experiment | Paper reference | Canonical script | Reference Python port |
+|------------|----------------|------------------|----------------------|
+| **A** — Spread of policy-gradient outcomes (partial vs. full observability) | Table 1 | `matlab/pomdp_localopt/run_pomdp_localopt_experiment.m` | `local_optima_experiments.py` |
+| **B** — Counting distinct local optima | Table 2 | `matlab/pomdp_localopt/run_pomdp_localopt_experiment.m` | `local_optima_experiments.py` (with adjusted (S, A, O) grid) |
+| **C** — Finite-memory policies via observation enrichment | Tables 3a/3b | `matlab/pomdp_memory_enhancement/run_pomdp_memory_enhancement_experiment.m` | — |
+
+The MATLAB outputs are checked in alongside the scripts:
+- `matlab/pomdp_localopt/summary_table.md` matches Table 1 exactly.
+- `matlab/pomdp_memory_enhancement/summary_table.md` matches Tables 3a/3b exactly.
 
 ## Repository structure
 
@@ -43,40 +45,74 @@ pip install -r requirements.txt
 ├── README.md
 ├── LICENSE
 ├── requirements.txt
-├── pomdp_linear_nonlinear_inequalities.py
-├── local_optima_experiments.py
-├── test_local_optima.py
-├── pomdp_structural_ablations.py
-├── pomdp_optim_dynamics.py
-├── pomdp_optim_dynamics_very_noisy.py
-├── initial_distribution_analysis.py
-├── initial_distribution_analysis_multi.py
-└── figures/                          # output figures from running the scripts
+├── pomdp_linear_nonlinear_inequalities.py   # Figs 2, 3
+├── initial_distribution_analysis.py          # Fig 4
+├── initial_distribution_analysis_multi.py    # Fig 4 variants across configurations
+├── pomdp_optim_dynamics.py                   # Supporting: optimization dynamics + POMDPAnalyzer
+├── pomdp_optim_dynamics_very_noisy.py        # Supporting: very noisy three-region case
+├── pomdp_structural_ablations.py             # Exploratory structural comparisons
+├── local_optima_experiments.py               # Python reference port of Experiments A/B
+├── test_local_optima.py                      # Gradient correctness tests
+├── matlab/
+│   ├── pomdp_localopt/                       # Canonical Experiments A & B (MATLAB)
+│   │   ├── run_pomdp_localopt_experiment.m
+│   │   ├── export_summary_table_markdown.m
+│   │   ├── summary_table.md
+│   │   └── README.txt
+│   └── pomdp_memory_enhancement/             # Canonical Experiment C (MATLAB)
+│       ├── run_pomdp_memory_enhancement_experiment.m
+│       ├── summary_table.md
+│       └── README.txt
+└── figures/                                   # Generated output figures
 ```
 
-### Reproducing paper figures
+## Installation
 
-**Figures 1 & 2** (linear and semi-algebraic boundaries):
+### Python
+
 ```bash
+git clone https://github.com/ryan-a-anderson/pomdp-value-geometry.git
+cd pomdp-value-geometry
+pip install -r requirements.txt
+```
+
+Dependencies: `numpy`, `matplotlib`, `scipy`.
+
+### MATLAB
+
+The MATLAB scripts use only base MATLAB (no toolboxes required beyond the Statistics Toolbox for `gamrnd`). Tested on MATLAB R2022b+.
+
+## Reproducing paper results
+
+### Figures (Python)
+
+```bash
+# Figs 2 and 3 (linear and semi-algebraic boundaries)
 python pomdp_linear_nonlinear_inequalities.py
-```
 
-**Figure 3** (initial state distribution dependence):
-```bash
+# Fig 4 (initial state distribution dependence)
 python initial_distribution_analysis.py
 ```
 
-**Table 1** (Experiment A — policy-gradient spread across (S, A, O) grid):
-```bash
-python local_optima_experiments.py
+### Experiments A & B — Local optima (MATLAB)
+
+```matlab
+cd matlab/pomdp_localopt
+results = run_pomdp_localopt_experiment;
 ```
 
-**Tables 2–3** (Experiments B/C — local optima count, finite memory):
-```bash
-python pomdp_structural_ablations.py
+Outputs `output/batch_summary.png`, `output/landscape_summary.png`, `output/summary_table.md`, `output/results.mat`.
+
+### Experiment C — Finite-memory (MATLAB)
+
+```matlab
+cd matlab/pomdp_memory_enhancement
+results = run_pomdp_memory_enhancement_experiment;
 ```
 
-## POMDP instance used in Figures 1 & 2
+Outputs `output/memory_enhancement_summary.png`, `output/summary_table.md`, `output/results.mat`.
+
+## POMDP instance for Figs 2 & 3
 
 States S = {0, 1}, actions A = {0, 1}, observations O = {0, 1, 2}, discount γ = 0.9.
 
@@ -90,11 +126,13 @@ R   = [[1, 0],          β = [[0.80, 0.10, 0.10],
 
 ## Experiment setup (Appendix B.2)
 
-All experiments sample random POMDP instances from (S, A, O) configurations on the grid {4, 8, 12} × {2, 3, 4} × {2, 3}. For each instance, 50 independent policy-gradient runs are launched from i.i.d. standard-normal logit initializations with learning rate η = 0.005 and T = 3000 steps. All randomness is seeded to 42 for reproducibility.
+All experiments draw POMDP instances from a fixed distribution:
+- **Transition kernels**: each row $\alpha_a(\cdot|s) \sim \text{Dirichlet}(\mathbf{1}_S)$ per action.
+- **Observation kernel**: each row $\beta(\cdot|s) \sim \text{Dirichlet}(\mathbf{1}_O)$.
+- **Rewards**: $r_a(s) \sim \text{Uniform}[0, 10]$.
+- **Initial state distribution**: $\rho \sim \text{Dirichlet}(\mathbf{1}_S)$.
 
-- **Experiment A**: measures value spread, suboptimal fraction, and policy spread across restarts for partial vs. fully observable instances.
-- **Experiment B**: clusters converged value vectors to count distinct local optima reached.
-- **Experiment C**: extends to finite-memory policies via observation enhancement and measures how memory reduces (but does not eliminate) value spread.
+Memoryless stochastic policies are parametrized by softmax over observation-conditioned logits. Optimization uses vanilla gradient ascent ($\eta = 0.005$, $T = 3000$) with closed-form gradients via the adjoint $\lambda = (I - \gamma P^\pi)^{-1} \rho$.
 
 ## Citation
 
