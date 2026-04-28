@@ -34,6 +34,22 @@ pip install -r requirements.txt
 | `pomdp_optim_dynamics.py` | Supporting | Multi-start optimization trajectories and feasible value region visualization |
 | `pomdp_optim_dynamics_very_noisy.py` | Supporting | Same for the "very noisy" three-region configuration |
 
+## Repository structure
+
+```
+.
+├── README.md
+├── LICENSE
+├── requirements.txt
+├── pomdp_linear_nonlinear_inequalities.py
+├── pomdp_structural_ablations.py
+├── pomdp_optim_dynamics.py
+├── pomdp_optim_dynamics_very_noisy.py
+├── initial_distribution_analysis.py
+├── initial_distribution_analysis_multi.py
+└── figures/                          # output figures from running the scripts
+```
+
 ### Reproducing paper figures
 
 **Figures 1 & 2** (linear and semi-algebraic boundaries):

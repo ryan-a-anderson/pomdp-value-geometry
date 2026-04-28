@@ -41,17 +41,24 @@ env/
 # Environment variables
 .env
 
-# Output files (optional - comment out if you want to track these)
-# *.png
-# *.pdf
-
 # Large data files
 *.npy
 *.npz
 *.h5
 *.hdf5
+*.json
 
 # Temporary files
 *.tmp
 *.bak
 *.log
+
+# Local experiment outputs not part of the paper
+*.html
+compacted_convo_*.md
+paper_in_prog_*.md
+DEPLOYMENT_COMPLETE.txt
+DISCRIMINANT_RESEARCH_PLAN.*
+BOUNDARY_VISUALIZATION_SUMMARY.md
+LARGE_GRID_README.md
+Q_CURVES_README.md
