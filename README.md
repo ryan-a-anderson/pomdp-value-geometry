@@ -26,7 +26,7 @@ The experiments illustrate two consequences of this geometric structure:
 
 ### Experiments (Appendix B.2)
 
-The MATLAB scripts in `matlab/` are the canonical implementations that produced the tables in the paper. The Python `local_optima_experiments.py` is an independent reference port.
+The MATLAB scripts in `matlab/` are the canonical implementations that produced the tables in the paper. The Python files `local_optima_experiments.py` and `pomdp_enhancement_experiment.py` are ports of the same MATLAB code into Python.
 
 | Experiment | Paper reference | Canonical script | Reference Python port |
 |------------|----------------|------------------|----------------------|
@@ -34,9 +34,6 @@ The MATLAB scripts in `matlab/` are the canonical implementations that produced 
 | **B** — Counting distinct local optima | Table 2 | `matlab/pomdp_localopt/run_pomdp_localopt_experiment.m` | `local_optima_experiments.py` (with adjusted (S, A, O) grid) |
 | **C** — Finite-memory policies via observation enrichment | Tables 3a/3b | `matlab/pomdp_memory_enhancement/run_pomdp_memory_enhancement_experiment.m` | — |
 
-The MATLAB outputs are checked in alongside the scripts:
-- `matlab/pomdp_localopt/summary_table.md` matches Table 1 exactly.
-- `matlab/pomdp_memory_enhancement/summary_table.md` matches Tables 3a/3b exactly.
 
 ## Repository structure
 
