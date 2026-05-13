@@ -301,7 +301,7 @@ class StructuralAblationSuite:
         print(f"\n{'='*60}")
         print(f"Analyzing: {name}")
         print(f"{'='*60}")
-        print(f"States: {P.shape[1]}, Actions: {P.shape[0]}, Observations: {Beta.shape[0]}")
+        print(f"States: {P.shape[1]}, Actions: {P.shape[0]}, Observations: {Beta.shape[1]}")
         print(f"Transition matrices: {P.shape}")
         print(f"Beta (obs kernel): {Beta.shape}")
 
@@ -313,7 +313,7 @@ class StructuralAblationSuite:
         all_endpoints_p = []  # policy parameters
         all_endpoint_values = []
         basin_info = {}
-        rng = np.random.default_rng()
+        rng = np.random.default_rng(self.seed)
 
         for alpha in alphas:
             rho = np.array([alpha, 1-alpha], dtype=float)

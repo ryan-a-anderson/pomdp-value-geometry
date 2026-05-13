@@ -224,6 +224,12 @@ class POMDPAnalyzer:
         for t in range(steps):
             g, v = self.grad_objective(p, rho)
 
+            # Record consistent (p, v, J) at current p before updating.
+            hist["p"].append(p.copy())
+            hist["v"].append(v.copy())
+            hist["J"].append(float(np.dot(rho, v)))
+            hist["grad"].append(g.copy())
+
             if clip_grad is not None:
                 gn = np.linalg.norm(g)
                 if gn > clip_grad:
@@ -235,11 +241,6 @@ class POMDPAnalyzer:
 
             # project back to box constraints
             p = np.clip(p, 0.0, 1.0)
-
-            hist["p"].append(p.copy())
-            hist["v"].append(v.copy())
-            hist["J"].append(float(np.dot(rho, v)))
-            hist["grad"].append(g.copy())
 
         # convert to arrays
         hist["p"] = np.array(hist["p"])
